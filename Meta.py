@@ -32,6 +32,11 @@ def heuristicsminer(log, minRel: 0.5, minAnd : 0.65):
     #hn_visualizer.view(graph)
     activities = heuristicsnet.activities
     return heuristicsnet
+def inductiveminer(log):
+    ind, im, fm = inductive_miner.apply(log)
+    graph = pn_visualizer.apply(ind, im, fm)
+    pn_visualizer.view(graph)
+    return ind, im, fm
 def getTotalActivityOccurrence(log):
     heuristicsnet = heuristics_miner.apply_heu(log)
     graph = hn_visualizer.apply(heuristicsnet)
@@ -41,35 +46,36 @@ def getTotalActivityOccurrence(log):
 def getOrderAccuaracy(log1,log2,log3):
     with open('algo_3.json') as f:
         data = json.load(f)
-        list_of_results = {"ISC" : 0}
+        list_of_results = {}
         list1 = getTotalActivityOccurrence(log1)
         list2 = getTotalActivityOccurrence(log2)
         list3 = getTotalActivityOccurrence(log3)
-        counter = 0
         for i in data:
+           counter = 0
            for events in data[i]:
-               counter +=1
+               counter += 1
            for key, value in list1.items():
                if(key in i):
                    if i in list_of_results.keys():
-                       if ((value/2)/counter) > list_of_results[i]:
-                           list_of_results.update({i: ((value / 2) / counter)})
-                       else: list_of_results.update({i: list_of_results[i]})
-                   else: list_of_results.update({i : ((value/2)/counter)})
+                     if (counter/(value/2)) > list_of_results[i]:
+                         list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+                     else: counter = counter
+                   else: list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
            for key, value in list2.items():
-               if(key in i):
-                   if i in list_of_results.keys():
-                       if ((value / 2) / counter) > list_of_results[i]:
-                           list_of_results.update({i: ((value / 2) / counter)})
-                   else:
-                       list_of_results.update({i: ((value / 2) / counter)})
+              if(key in i):
+                if i in list_of_results.keys():
+                  if (counter / (value / 2)) > list_of_results[i]:
+                    list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+                  else: counter = counter
+                else: list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
            for key, value in list3.items():
-               if(key in i):
-                   if i in list_of_results.keys():
-                       if ((value / 2) / counter) > list_of_results[i]:
-                           list_of_results.update({i: ((value / 2) / counter)})
-                   else:
-                       list_of_results.update({i: ((value / 2) / counter)})
+                if(key in i):
+                 if i in list_of_results.keys():
+                  if (counter / (value / 2)) > list_of_results[i]:
+                      list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+                  else: counter = counter
+                 else:
+                       list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
         return list_of_results
 
 def get_activities(log):
@@ -78,19 +84,14 @@ def get_activities(log):
     # hn_visualizer.view(graph)
     activities = heuristicsnet.activities
     return activities
-def inductiveminer(log):
-    ind, im, fm = inductive_miner.apply(log)
-    graph = pn_visualizer.apply(ind, im, fm)
-    pn_visualizer.view(graph)
-    return ind, im, fm
 
 
 def readlog(log):
     new = pm4py.read_xes(log)
     return new
 if __name__ == '__main__':
-    print("Hi")
-    # print(getOrderAccuaracy(log_poster,log_flyer))
+   # print("Hi")
+    print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
     #print(getTotalActivityOccurrence(log_flyer))
      #for i in act:
      #   print(i)
