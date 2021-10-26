@@ -1,5 +1,6 @@
 import json
 import os
+from main import gettotalalgo3constraintsKPI, getOrderedActivityOccurrences, getNonConTotal
 import pm4py
 import pm4py.objects.bpmn.layout.variants.pygraphviz
 from pm4py.algo.discovery.alpha import algorithm as alpha_miner
@@ -85,18 +86,34 @@ def get_activities(log):
     activities = heuristicsnet.activities
     return activities
 
-
+def getOrderSummary():
+    total = gettotalalgo3constraintsKPI()
+    occPerISC = getOrderedActivityOccurrences()
+    occPerISC.update({"The total number of Ordering ISC is" : total})
+    return dict(sorted(occPerISC.items(), key=lambda x: x[1], reverse=True))
+def getPairAllocation(total):
+    #total = getNonConTotal()
+    result = {}
+    for key, value in total.items():
+        for keys, values in total.items():
+         i, j = key.split("/")
+         if(i in keys and j in keys and keys != key):
+             result.update({key: round((value / (value + values)) * 100, 3)})
+             result.update({keys: round((values / (value + values)) * 100, 3)})
+         if key not in result.keys():
+            result.update({key : 100})
+    return result
 def readlog(log):
     new = pm4py.read_xes(log)
     return new
 if __name__ == '__main__':
    # print("Hi")
-    print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
+   # print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
     #print(getTotalActivityOccurrence(log_flyer))
      #for i in act:
      #   print(i)
-
-
+     #print(getOrderSummary())
+     print(getPairAllocation(getNonConTotal()))
 
 
 #activities = attributes_filter.get_attribute_values(log_flyer, "concept:name")

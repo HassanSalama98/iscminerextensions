@@ -26,7 +26,6 @@ def gettotalalgo3constraintsKPI():
         counter = 0
         for i in data:
             counter += 1
-            print(i)
     return counter
 def getTimeDifference():
     print()
@@ -61,14 +60,20 @@ def getPairAllocation(total):
          if key not in result.keys():
             result.update({key : 100})
     return result
-def getNumberoFNonConISC(total):
-    count = len(total)
-    return count
+def getNonConISC(total):
+    for key,value in total.copy().items():
+        for keys in total.copy():
+            i, j = key.split("/")
+            if (i in keys and j in keys and keys != key):
+                del total[keys]
+                total.update({key: value})
+    return list(total.keys())
 if __name__ == '__main__':
     #print(getActivityOccurrences())
     #print(gettotalalgo3constraintsKPI())
-    print(getOrderingISC())
+    #print(getOrderingISC())
+   # print(getOrderedActivityOccurrences())
     #print(getNonConISC())
-    print(getNonConTotal())
+   # print(getNonConTotal())
  #print(getPairAllocation(getNonConTotal()))
-    #print(getNumberoFNonConISC(getNonConTotal()))
+    print(getNonConISC(getNonConTotal()))
