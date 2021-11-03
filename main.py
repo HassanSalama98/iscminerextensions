@@ -1,12 +1,17 @@
 import json
+import os
 import pandas as pd
 from collections import Counter
+from ISCObject import *
 def getOrderingISC():
     with open('algo_3.json') as f:
         data = json.load(f)
-        list_of_ISC = []
+        list_of_ISC = {}
     for i in data:
-     list_of_ISC.append(i)
+        counter = 0
+        for event in data[i]:
+            counter += 1
+            list_of_ISC.update({i: counter})
     return list_of_ISC
 
 def getOrderedActivityOccurrences():
@@ -60,7 +65,7 @@ def getPairAllocation(total):
          if key not in result.keys():
             result.update({key : 100})
     return result
-def getNonConISC(total):
+def getNonConISCs(total):
     for key,value in total.copy().items():
         for keys in total.copy():
             i, j = key.split("/")
@@ -68,12 +73,35 @@ def getNonConISC(total):
                 del total[keys]
                 total.update({key: value})
     return list(total.keys())
+
 if __name__ == '__main__':
-    #print(getActivityOccurrences())
-    #print(gettotalalgo3constraintsKPI())
-    #print(getOrderingISC())
-   # print(getOrderedActivityOccurrences())
-    #print(getNonConISC())
-   # print(getNonConTotal())
- #print(getPairAllocation(getNonConTotal()))
-    print(getNonConISC(getNonConTotal()))
+    # pat = os.getcwd()
+    # path = os.path.join(pat, "data", "manufacturing")
+    # args = {}
+    # args.update({"eps3": 0})
+    # args.update({"eps4": 1})
+    # args.update({"g3": 1})
+    # args.update({"a3": 1})
+    # args.update({"a4": 1})
+    # args.update({"mergeattribute": "null"})
+    # files = []
+    # for file in os.listdir(path):
+    #     log = os.path.join(path, file)
+    #     files.append(log)
+    # if not os.path.exists(os.path.join(path, 'pickle')):
+    #     os.makedirs(os.path.join(path, 'pickle'))
+    # if not os.path.exists(os.path.join(path, 'json')):
+    #     os.makedirs(os.path.join(path, 'json'))
+    # try:
+    #     iscobj = ISCObject(path, files, args)
+    #     iscobj.write_results()
+    # except ValueError as ve:
+    #     print("Caught the culprit")
+    #     x = dict()
+    #     x['error'] = str(ve)
+    #     with open(os.path.join(path, 'json', 'algo_3.json'), 'w') as f:
+    #         json.dump(x, f)
+    #     with open(os.path.join(path, 'json', 'algo_4.json'), 'w') as f:
+    #         json.dump(x, f)
+    # f.closed
+    print(getNonConISC())

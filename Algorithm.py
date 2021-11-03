@@ -417,7 +417,7 @@ class Algorithm_3(Algorithm):
     self.result = self.calc(iscobj)
     
   def calc(self,iscobj):
-    if(self.args.eps3 >= 0.5):
+    if(self.args["eps3"] >= 0.5):
       raise RuntimeError("Epsilon for Algorithm 3 must be smaller than 0.5")
     ret = collections.defaultdict(dict)
     if len(iscobj.logs.keys()) < 2 or (iscobj.lifecycle_options['lifecycle_exists']==1 and len(iscobj.lifecycle_options['lifecycle_options']) > 1 and  "start" not in iscobj.lifecycle_options['lifecycle_options']):
@@ -447,13 +447,13 @@ class Algorithm_3(Algorithm):
     ret = collections.defaultdict(list)
     #k is tuple of eventpair names
     for k in params['p1']:
-      if(float(params['p1'][k]['count'])/min(params['p2'][k[0]], params['p2'][k[1]]) > self.args.g3):
+      if(float(params['p1'][k]['count'])/min(params['p2'][k[0]], params['p2'][k[1]]) > self.args["g3"]):
         count_good = params['p1'][k]['count']
         if k[::-1] not in params['p1']:
           ret[tuple(k)]=params['p1'][k]['pairs']
           continue
         count_total = params['p1'][k[::-1]]['count'] + count_good
-        if (float(count_good)/count_total <= self.args.eps3):
+        if (float(count_good)/count_total <= self.args["eps3"]):
           ret[tuple(k)]=params['p1'][k]['pairs']
     return ret
     
@@ -497,7 +497,7 @@ class Algorithm_4(Algorithm):
           else:
             event1 = events[idx1]
             event2 = events[idx2]
-          if event1.ev2.log != event2.ev1.log and parse(event2.ev1.ts()) - parse(event1.ev2.ts()) >=  datetime.timedelta(seconds=self.args.eps4) and (parse(event2.ev1.ts()) - parse(event1.ev1.ts())) != 0:
+          if event1.ev2.log != event2.ev1.log and parse(event2.ev1.ts()) - parse(event1.ev2.ts()) >=  datetime.timedelta(seconds=self.args["eps4"]) and (parse(event2.ev1.ts()) - parse(event1.ev1.ts())) != 0:
             name = (event1.ev2.lb(),event2.ev1.lb())
             ret[name].append({'ev1':{'ev1start':event1.ev1,'ev1end':event1.ev2},'ev2' : {'ev2start':event2.ev1,'ev2end':event2.ev2}})
     return self.filter({"p1":parallel,"p2": ret})

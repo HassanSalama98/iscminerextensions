@@ -12,7 +12,6 @@ from Algorithm import *
 from SetEncoder import*
 from EventPair import *
 from Heuristics import *
-from ISCGraph import *
 import re
 import collections
 import pickle
@@ -33,7 +32,7 @@ class ISCObject:
       parser = SX.make_parser()
       handler = EHandler(path,self.logs,self.start_events,self.end_events,self.lifecycle_options,ev_map)
       parser.setContentHandler(handler)
-      parser.parse(path)
+      #parser.parse(path)
     self.mt = self.merge_traces()
     self.create_results()
     for path in paths:
@@ -62,10 +61,10 @@ class ISCObject:
     attribs = list(self.get_attribset())
     if len(attribs)==1:
       inp = attribs[0]
-      self.args.mergeattribute=attribs[0]
-    elif self.args.mergeattribute:
+      self.args["mergeattribute"]=attribs[0]
+    elif self.args["mergeattribute"]:
       for att in attribs:
-        if att == self.args.mergeattribute:
+        if att == self.args["mergeattribute"]:
           inp = att
     else:
       raise ValueError("There is no possibility to merge all traces. Either there is no option or too many. If there is more than one, please use the config file")
@@ -87,18 +86,18 @@ class ISCObject:
     #    self.algos['a1'] = Algorithm_1(self.args,self)
     #if self.args.a2:
      #   self.algos['a2'] = Algorithm_2(self.args,self)
-    if self.args.a3:
+    if self.args["a3"] == 1: #change to self.args["a3"] == 1
       try:
         self.algos['a3'] = Algorithm_3(self.args,self)
       except RuntimeError as err:
          print("RuntimeError: {0} ".format(err))
-         self.args.a3=False
-    if self.args.a4:
+         self.args["a3"] = 0#change to self.args["a3"] = 0
+    if self.args["a4"] == 1: #change to self.args["a4"] == 1
       try:
         self.algos['a4'] = Algorithm_4(self.args,self)
       except RuntimeError as err:
          print("RuntimeError: {0} ".format(err))
-         self.args.a4=False
+         self.args["a4"] = 0 #change to self.args["a4"] = 0
   
   #pickle.load() currently missing-can be inserted to speed processing  
   def write_results(self):
@@ -121,17 +120,5 @@ class ISCObject:
          #print("RuntimeError: {0} ".format(err))
     if 'a3' in self.algos:
         self.algos['a3'].write(os.path.join(self.fn,'json',"algo_3"))
-        try:
-          iscg = ISCGraph(os.path.join(self.fn,'pdf',"algo_3"), self.heuristics,self.algos['a3'].result,"_".join([self.fn.split("/")[-1],"algo_3"]))
-          iscg.draw(float(self.args.minerabs), float(self.args.minerrel), True)
-          pickle.dump(iscg,open(os.path.join(self.fn,"pickle","algo_3.p"),"wb"))
-        except RuntimeError as err:
-          print("RuntimeError: {0} ".format(err))
     if 'a4' in self.algos:
         self.algos['a4'].write(os.path.join(self.fn,'json',"algo_4"))
-        try:
-          iscg = ISCGraph(os.path.join(self.fn,'pdf',"algo_4"), self.heuristics,self.algos['a4'].result,"_".join([self.fn.split("/")[-1],"algo_4"]))
-          iscg.draw(float(self.args.minerabs), float(self.args.minerrel), False)
-          pickle.dump(iscg,open(os.path.join(self.fn,"pickle","algo_4.p"),"wb"))
-        except RuntimeError as err:
-          print("RuntimeError: {0} ".format(err))

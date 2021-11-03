@@ -43,8 +43,6 @@ if not os.path.exists(os.path.join(fn,'pickle')):
   os.makedirs(os.path.join(fn,'pickle'))
 if not os.path.exists(os.path.join(fn,'json')):
   os.makedirs(os.path.join(fn,'json'))
-if not os.path.exists(os.path.join(fn,'pdf')):
-  os.makedirs(os.path.join(fn,'pdf'))
 
 try:
   iscobj = ISCObject(fn,paths,args)
