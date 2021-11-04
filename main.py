@@ -134,3 +134,4 @@ if __name__ == '__main__':
     # f.closed
     #print(getNonConISCs(getNonConTotal()))
     print(getNonConTotal())
+    print(getNonConISCs(getNonConTotal()))
