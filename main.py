@@ -13,6 +13,16 @@ def getOrderingISC():
             counter += 1
             list_of_ISC.update({i: counter})
     return list_of_ISC
+def getManufOrderingISC():
+    with open('manuf_algo_3.json') as f:
+        data = json.load(f)
+        list_of_ISC = {}
+    for i in data:
+        counter = 0
+        for event in data[i]:
+            counter += 1
+            list_of_ISC.update({i: counter})
+    return list_of_ISC
 
 def getOrderedActivityOccurrences():
     with open('algo_3.json') as f:
@@ -25,8 +35,26 @@ def getOrderedActivityOccurrences():
             for item in sublist:
                 final_list.append(item)
         return Counter(final_list)
+def getManufOrderSummary():
+    with open('manuf_algo_3.json') as f:
+        data = json.load(f)
+        list_of_ISC = []
+        final_list = []
+        for i in data:
+            list_of_ISC.append(i.split("/"))
+        for sublist in list_of_ISC:
+            for item in sublist:
+                final_list.append(item)
+        return Counter(final_list)
 def gettotalalgo3constraintsKPI():
     with open('algo_3.json') as f:
+        data = json.load(f)
+        counter = 0
+        for i in data:
+            counter += 1
+    return counter
+def getManufAlgo3Constraints():
+    with open('manuf_algo_3.json') as f:
         data = json.load(f)
         counter = 0
         for i in data:
@@ -104,4 +132,5 @@ if __name__ == '__main__':
     #     with open(os.path.join(path, 'json', 'algo_4.json'), 'w') as f:
     #         json.dump(x, f)
     # f.closed
-    print(getNonConISC())
+    #print(getNonConISCs(getNonConTotal()))
+    print(getNonConTotal())

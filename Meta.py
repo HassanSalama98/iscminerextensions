@@ -12,6 +12,7 @@ from pm4py.visualization.petri_net import visualizer as pn_visualizer
 from pm4py.algo.evaluation.replay_fitness import algorithm as replay_fitness_evaluator
 from pm4py.algo.evaluation.precision import algorithm as precision_evaluator
 from pm4py.algo.evaluation.generalization import algorithm as generalization_evaluator
+from main import getManufAlgo3Constraints, getManufOrderSummary
 #from ISCmain import *
 from ISCObject import *
 
@@ -122,6 +123,11 @@ def getOrderSummary():
     occPerISC = getOrderedActivityOccurrences()
     occPerISC.update({"The total number of Ordering ISC is" : total})
     return dict(sorted(occPerISC.items(), key=lambda x: x[1], reverse=True))
+def getOrderInsights():
+    total = getManufAlgo3Constraints()
+    occPerISC = getManufOrderSummary()
+    occPerISC.update({"The total number of Ordering ISC is": total})
+    return dict(sorted(occPerISC.items(), key=lambda x: x[1], reverse=True))
 def getPairAllocation(total):
     result = {}
     for key, value in total.items():
@@ -137,16 +143,16 @@ def readlog(log):
     new = pm4py.read_xes(log)
     return new
 if __name__ == '__main__':
-    listOfLogs = []
-    for file in os.listdir(paths):
-        log = xes_importer.apply(os.path.join(paths, file))
-        listOfLogs.append(log)
-    print(getOrderObedience(listOfLogs))
+    # listOfLogs = []
+    # for file in os.listdir(paths):
+    #     log = xes_importer.apply(os.path.join(paths, file))
+    #     listOfLogs.append(log)
+    # print(getOrderObedience(listOfLogs))
    #print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
     #print(getTotalActivityOccurrence(log_flyer))
      #for i in act:
      #   print(i)
-     #print(getOrderSummary())
+     print(getOrderInsights())
 
 
 
