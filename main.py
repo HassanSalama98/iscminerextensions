@@ -4,7 +4,7 @@ import pandas as pd
 from collections import Counter
 from ISCObject import *
 def getOrderingISC():
-    with open('algo_3.json') as f:
+    with open('printer_algo_3.json') as f:
         data = json.load(f)
         list_of_ISC = {}
     for i in data:
@@ -25,7 +25,7 @@ def getManufOrderingISC():
     return list_of_ISC
 
 def getOrderedActivityOccurrences():
-    with open('algo_3.json') as f:
+    with open('printer_algo_3.json') as f:
         data = json.load(f)
         list_of_ISC = []
         final_list = []
@@ -47,7 +47,7 @@ def getManufOrderSummary():
                 final_list.append(item)
         return Counter(final_list)
 def gettotalalgo3constraintsKPI():
-    with open('algo_3.json') as f:
+    with open('printer_algo_3.json') as f:
         data = json.load(f)
         counter = 0
         for i in data:
@@ -63,14 +63,14 @@ def getManufAlgo3Constraints():
 def getTimeDifference():
     print()
 def getNonConISC():
-    with open('algo_4.json') as f:
+    with open('printer_algo_4.json') as f:
         data = json.load(f)
         list_of_ISC = []
     for i in data:
      list_of_ISC.append(i)
     return list_of_ISC
 def getNonConTotal():
-    with open('algo_4.json') as f:
+    with open('printer_algo_4.json') as f:
         data = json.load(f)
         result ={}
         for i in data:
@@ -80,27 +80,43 @@ def getNonConTotal():
                     counter += 1
             result.update({i : counter})
     return result
-
+def getManufNonConTotal():
+    with open('manuf_algo_4.json') as f:
+        data = json.load(f)
+        result ={}
+        for i in data:
+            counter = 0
+            for events in data[i]:
+                for j in events:
+                    counter += 1
+            result.update({i : counter})
+    return result
 def getPairAllocation(total):
-    #total = getNonConTotal()
     result = {}
     for key, value in total.items():
         for keys, values in total.items():
          i, j = key.split("/")
          if(i in keys and j in keys and keys != key):
-             result.update({key: round((value / (value + values)) * 100, 3)})
-             result.update({keys: round((values / (value + values)) * 100, 3)})
+             result.update({key: [round((value / (value + values)) * 100, 3), round((values / (value + values)) * 100, 3)]})
+             #result.update({keys: round((values / (value + values)) * 100, 3)})
          if key not in result.keys():
-            result.update({key : 100})
+            result.update({key : [100,0]})
+    for o, valuer in result.copy().items():
+        for l in result.copy().keys():
+            m,n = o.split("/")
+            if m in l and n in l and o != l:
+                del result[l]
+                result.setdefault(o, valuer)
     return result
 def getNonConISCs(total):
     for key,value in total.copy().items():
-        for keys in total.copy():
+        for keys, values in total.copy().items():
             i, j = key.split("/")
             if (i in keys and j in keys and keys != key):
+                sum = value + values
                 del total[keys]
-                total.update({key: value})
-    return list(total.keys())
+                total.update({key: sum})
+    return total
 
 if __name__ == '__main__':
     # pat = os.getcwd()
@@ -133,5 +149,6 @@ if __name__ == '__main__':
     #         json.dump(x, f)
     # f.closed
     #print(getNonConISCs(getNonConTotal()))
-    print(getNonConTotal())
-    print(getNonConISCs(getNonConTotal()))
+    #print(getNonConISCs(getNonConTotal()))
+    print(getManufOrderingISC())
+

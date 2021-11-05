@@ -1,6 +1,6 @@
 import json
 import os
-from main import gettotalalgo3constraintsKPI, getOrderedActivityOccurrences, getNonConTotal
+from main import gettotalalgo3constraintsKPI, getOrderedActivityOccurrences, getNonConTotal, getManufOrderingISC,getOrderingISC
 import pm4py
 from pm4py.objects.log.importer.xes import importer as xes_importer
 import pm4py.objects.bpmn.layout.variants.pygraphviz
@@ -26,12 +26,17 @@ log_bill = pm4py.read_xes(path_bill)
 log_flyer = pm4py.read_xes(path_flyer)
 log_poster = pm4py.read_xes(path_poster)
 
-def getallActivities():
-    result = []
+def getAllActivities():
+    result = ""
+    remove = "external"
     for file in os.listdir(paths):
         log = xes_importer.apply(os.path.join(paths, file))
         act = get_activities(log)
+        act = [x for x in act if not (remove in x)]
         print(act)
+        temp = ','.join(act)
+        result += temp + "%"
+    return result
 
 def alphaminer(log):
     alph, ima, fma = alpha_miner.apply(log)
@@ -56,7 +61,7 @@ def getTotalActivityOccurrence(log):
     total = heuristicsnet.activities_occurrences
     return total
 def getOrderAccuaracy(log1,log2,log3):
-    with open('algo_3.json') as f:
+    with open('printer_algo_3.json') as f:
         data = json.load(f)
         list_of_results = {}
         list1 = getTotalActivityOccurrence(log1)
@@ -121,12 +126,12 @@ def get_activities(log):
 def getOrderSummary():
     total = gettotalalgo3constraintsKPI()
     occPerISC = getOrderedActivityOccurrences()
-    occPerISC.update({"The total number of Ordering ISC is" : total})
+    occPerISC.update({"Total" : total})
     return dict(sorted(occPerISC.items(), key=lambda x: x[1], reverse=True))
 def getOrderInsights():
     total = getManufAlgo3Constraints()
     occPerISC = getManufOrderSummary()
-    occPerISC.update({"The total number of Ordering ISC is": total})
+    occPerISC.update({"Total": total})
     return dict(sorted(occPerISC.items(), key=lambda x: x[1], reverse=True))
 def getPairAllocation(total):
     result = {}
@@ -147,12 +152,15 @@ if __name__ == '__main__':
     # for file in os.listdir(paths):
     #     log = xes_importer.apply(os.path.join(paths, file))
     #     listOfLogs.append(log)
-    # print(getOrderObedience(listOfLogs))
-   #print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
+   #  print(getTotalActivityOccurrence(log_poster))
+   #  print(getTotalActivityOccurrence(log_flyer))
+   #  print(getTotalActivityOccurrence(log_bill))
+   # # print(getOrderObedience(listOfLogs))
+   #  print(getOrderingISC())
+    print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
     #print(getTotalActivityOccurrence(log_flyer))
      #for i in act:
      #   print(i)
-     print(getOrderInsights())
 
 
 
