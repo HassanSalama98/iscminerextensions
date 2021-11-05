@@ -412,84 +412,92 @@ class Algorithm:
 
 # ordered execution
 class Algorithm_3(Algorithm):
-  def __init__(self,args,iscobj):
+  def __init__(self, args, iscobj):
     super().__init__(args)
     self.result = self.calc(iscobj)
-    
-  def calc(self,iscobj):
-    if(self.args["eps3"] >= 0.5):
+
+  def calc(self, iscobj):
+    if (self.args.eps3 >= 0.5):
       raise RuntimeError("Epsilon for Algorithm 3 must be smaller than 0.5")
     ret = collections.defaultdict(dict)
-    if len(iscobj.logs.keys()) < 2 or (iscobj.lifecycle_options['lifecycle_exists']==1 and len(iscobj.lifecycle_options['lifecycle_options']) > 1 and  "start" not in iscobj.lifecycle_options['lifecycle_options']):
-      raise RuntimeError("Algorithm 3 only works with at least 2 log files and without any lifecycles or at least lifecycle transition start")
+    if len(iscobj.logs.keys()) < 2 or (iscobj.lifecycle_options['lifecycle_exists'] == 1 and len(
+            iscobj.lifecycle_options['lifecycle_options']) > 1 and "start" not in iscobj.lifecycle_options[
+                                         'lifecycle_options']):
+      raise RuntimeError(
+        "Algorithm 3 only works with at least 2 log files and without any lifecycles or at least lifecycle transition start")
     count = collections.defaultdict(int)
-    for trname,events in iscobj.mt.items():
-      for idx,ev1 in enumerate(events):
-        if iscobj.lifecycle_options['lifecycle_exists']==1 and len(iscobj.lifecycle_options['lifecycle_options']) > 1 and ev1.lc()!='start':
+    for trname, events in iscobj.mt.items():
+      for idx, ev1 in enumerate(events):
+        if iscobj.lifecycle_options['lifecycle_exists'] == 1 and len(
+                iscobj.lifecycle_options['lifecycle_options']) > 1 and ev1.lc() != 'start':
           continue
-        count[ev1.lb()]+=1
+        count[ev1.lb()] += 1
         j = 1
-        while(idx+j<len(events)):
-          ev2 = events[idx+j]
-          if ev1.log == ev2.log or (iscobj.lifecycle_options['lifecycle_exists']==1 and len(iscobj.lifecycle_options['lifecycle_options']) > 1 and ev2.lc()!='start') or ev1.ts() == ev2.ts():
-            j+=1
+        while (idx + j < len(events)):
+          ev2 = events[idx + j]
+          if ev1.log == ev2.log or (iscobj.lifecycle_options['lifecycle_exists'] == 1 and len(
+                  iscobj.lifecycle_options['lifecycle_options']) > 1 and ev2.lc() != 'start') or ev1.ts() == ev2.ts():
+            j += 1
             continue
-          tupl = (ev1.lb(),ev2.lb())
+          tupl = (ev1.lb(), ev2.lb())
           if tupl not in ret:
-            ret[tupl]['pairs']=[]
-            ret[tupl]['count']=0
-          ret[tupl]['pairs'].append(EventPair(ev1,ev2))
-          ret[tupl]['count']+=1
+            ret[tupl]['pairs'] = []
+            ret[tupl]['count'] = 0
+          ret[tupl]['pairs'].append(EventPair(ev1, ev2))
+          ret[tupl]['count'] += 1
           break
-    return self.filter({"p1":ret,"p2":count})
+    return self.filter({"p1": ret, "p2": count})
 
-  def filter(self,params):
+  def filter(self, params):
     ret = collections.defaultdict(list)
-    #k is tuple of eventpair names
+    # k is tuple of eventpair names
     for k in params['p1']:
-      if(float(params['p1'][k]['count'])/min(params['p2'][k[0]], params['p2'][k[1]]) > self.args["g3"]):
+      if (float(params['p1'][k]['count']) / min(params['p2'][k[0]], params['p2'][k[1]]) > self.args.g3):
         count_good = params['p1'][k]['count']
         if k[::-1] not in params['p1']:
-          ret[tuple(k)]=params['p1'][k]['pairs']
+          ret[tuple(k)] = params['p1'][k]['pairs']
           continue
         count_total = params['p1'][k[::-1]]['count'] + count_good
-        if (float(count_good)/count_total <= self.args["eps3"]):
-          ret[tuple(k)]=params['p1'][k]['pairs']
+        if (float(count_good) / count_total <= self.args.eps3):
+          ret[tuple(k)] = params['p1'][k]['pairs']
     return ret
-    
-  def write(self,fn):
-    super().write(fn+".json",self.result)
-    
+
+  def write(self, fn):
+    super().write(fn + ".json", self.result)
+
 
 # non-concurrent execution
 class Algorithm_4(Algorithm):
-  def __init__(self,args,iscobj):
+  def __init__(self, args, iscobj):
     super().__init__(args)
     self.result = self.calc(iscobj)
-    
-  def calc(self,iscobj):
+
+  def calc(self, iscobj):
     ret_pairs = collections.defaultdict(list)
-    if len(iscobj.logs.keys()) < 2 or not(iscobj.lifecycle_options['lifecycle_exists']==1 and "start" in iscobj.lifecycle_options['lifecycle_options'] and "complete" in iscobj.lifecycle_options['lifecycle_options']):
-      raise RuntimeError("Algorithm 4 only works with at least 2 log files and lifecycle transitions start and complete are mandatory")
+    if len(iscobj.logs.keys()) < 2 or not (
+            iscobj.lifecycle_options['lifecycle_exists'] == 1 and "start" in iscobj.lifecycle_options[
+      'lifecycle_options'] and "complete" in iscobj.lifecycle_options['lifecycle_options']):
+      raise RuntimeError(
+        "Algorithm 4 only works with at least 2 log files and lifecycle transitions start and complete are mandatory")
     ret_pairs = self.get_start_complete_events(iscobj.mt.items())
     labels = collections.defaultdict(int)
-    for trname,events in iscobj.mt.items():
-      for idx1,ev1 in enumerate(events):
+    for trname, events in iscobj.mt.items():
+      for idx1, ev1 in enumerate(events):
         if ev1.attrib['lifecycle:transition'] != "start":
           continue
-        for idx2 in range(idx1+1,len(events)):
+        for idx2 in range(idx1 + 1, len(events)):
           ev2 = events[idx2]
-          if(ev2.attrib['lifecycle:transition'] == "start"): #and ev2.log != ev1.log):
-            labels[(ev1.attrib['concept:name'], ev2.attrib['concept:name'])]+=1
+          if (ev2.attrib['lifecycle:transition'] == "start"):  # and ev2.log != ev1.log):
+            labels[(ev1.attrib['concept:name'], ev2.attrib['concept:name'])] += 1
             break
     parallel = set()
     for l in labels:
-      if((l[1],l[0]) in labels):
+      if ((l[1], l[0]) in labels):
         parallel.add(l)
     ret = collections.defaultdict(list)
-    for trname,events in ret_pairs.items():
-      for idx1,ev1 in enumerate(events):
-        for idx2 in range(idx1+1,len(events)):
+    for trname, events in ret_pairs.items():
+      for idx1, ev1 in enumerate(events):
+        for idx2 in range(idx1 + 1, len(events)):
           ev2 = events[idx2]
           if parse(ev2.ev1.ts()) < parse(ev1.ev1.ts()):
             event1 = events[idx2]
@@ -497,17 +505,19 @@ class Algorithm_4(Algorithm):
           else:
             event1 = events[idx1]
             event2 = events[idx2]
-          if event1.ev2.log != event2.ev1.log and parse(event2.ev1.ts()) - parse(event1.ev2.ts()) >=  datetime.timedelta(seconds=self.args["eps4"]) and (parse(event2.ev1.ts()) - parse(event1.ev1.ts())) != 0:
-            name = (event1.ev2.lb(),event2.ev1.lb())
-            ret[name].append({'ev1':{'ev1start':event1.ev1,'ev1end':event1.ev2},'ev2' : {'ev2start':event2.ev1,'ev2end':event2.ev2}})
-    return self.filter({"p1":parallel,"p2": ret})
+          if event1.ev2.log != event2.ev1.log and parse(event2.ev1.ts()) - parse(event1.ev2.ts()) >= datetime.timedelta(
+                  seconds=self.args.eps4) and (parse(event2.ev1.ts()) - parse(event1.ev1.ts())) != 0:
+            name = (event1.ev2.lb(), event2.ev1.lb())
+            ret[name].append({'ev1': {'ev1start': event1.ev1, 'ev1end': event1.ev2},
+                              'ev2': {'ev2start': event2.ev1, 'ev2end': event2.ev2}})
+    return self.filter({"p1": parallel, "p2": ret})
 
-  def filter(self,params):
+  def filter(self, params):
     ret = collections.defaultdict(list)
     for key, value in params['p2'].items():
-      if(key in params['p1']):
+      if (key in params['p1']):
         ret[tuple(key)].append(value)
     return ret
-    
-  def write(self,fn):
-    super().write(fn+".json",self.result)
+
+  def write(self, fn):
+    super().write(fn + ".json", self.result)

@@ -12,8 +12,7 @@ from pm4py.visualization.petri_net import visualizer as pn_visualizer
 from pm4py.algo.evaluation.replay_fitness import algorithm as replay_fitness_evaluator
 from pm4py.algo.evaluation.precision import algorithm as precision_evaluator
 from pm4py.algo.evaluation.generalization import algorithm as generalization_evaluator
-from main import getManufAlgo3Constraints, getManufOrderSummary
-#from ISCmain import *
+from main import getManufAlgo3Constraints, getManufOrderSummary, getgeneraltotalalgo3constraintsKPI, getGeneralOrderedActivityOccurrences
 from ISCObject import *
 
 pat = os.getcwd()
@@ -21,6 +20,7 @@ path_bill = os.path.join(pat, "data", "printer", "billinstances.xes")
 path_flyer = os.path.join(pat, "data", "printer", "flyerinstances.xes")
 path_poster = os.path.join(pat, "data", "printer", "posterinstances.xes")
 paths = os.path.join(pat, "data", "manufacturing")
+pathg = os.path.join(pat, "data", "upload")
 os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz/bin/'
 log_bill = pm4py.read_xes(path_bill)
 log_flyer = pm4py.read_xes(path_flyer)
@@ -95,7 +95,7 @@ def getOrderAccuaracy(log1,log2,log3):
                        list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
         return list_of_results
 def getOrderObedience(listOfLogs):
-    with open('manuf_algo_3.json') as f:
+    with open('json/algo_3.json') as f:
         data = json.load(f)
         list_of_results = {}
         listOfLists = []
@@ -115,14 +115,17 @@ def getOrderObedience(listOfLogs):
                             counter = counter
                     else:
                         list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
-
         return list_of_results
 def get_activities(log):
     heuristicsnet = heuristics_miner.apply_heu(log)
     graph = hn_visualizer.apply(heuristicsnet)
     activities = heuristicsnet.activities
     return activities
-
+def getGeneralOrderSummary():
+    total = getgeneraltotalalgo3constraintsKPI()
+    occPerISC = getGeneralOrderedActivityOccurrences()
+    occPerISC.update({"Total": total})
+    return dict(sorted(occPerISC.items(), key=lambda x: x[1], reverse=True))
 def getOrderSummary():
     total = gettotalalgo3constraintsKPI()
     occPerISC = getOrderedActivityOccurrences()
@@ -148,23 +151,35 @@ def readlog(log):
     new = pm4py.read_xes(log)
     return new
 if __name__ == '__main__':
-    # listOfLogs = []
-    # for file in os.listdir(paths):
-    #     log = xes_importer.apply(os.path.join(paths, file))
-    #     listOfLogs.append(log)
+    listOfLogs = []
+    for file in os.listdir(pathg):
+        log = xes_importer.apply(os.path.join(pathg, file))
+        listOfLogs.append(log)
+        print(getTotalActivityOccurrence(log))
+    print(getOrderObedience(listOfLogs))
+    print(getOrderAccuaracy(log_flyer, log_bill, log_poster))
    #  print(getTotalActivityOccurrence(log_poster))
    #  print(getTotalActivityOccurrence(log_flyer))
    #  print(getTotalActivityOccurrence(log_bill))
    # # print(getOrderObedience(listOfLogs))
    #  print(getOrderingISC())
-    print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
+    #print(getOrderAccuaracy(log_poster, log_flyer, log_bill))
     #print(getTotalActivityOccurrence(log_flyer))
      #for i in act:
      #   print(i)
 
 
 
-#print(getallActivities())
+
+
+
+
+
+
+
+
+
+
 
 #activities = attributes_filter.get_attribute_values(log_flyer, "concept:name")
 #model_bill = pm4py.discover_bpmn_inductive(log_bill)

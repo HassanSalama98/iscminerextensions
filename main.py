@@ -1,5 +1,7 @@
 import json
 import os
+import yaml
+import argparse
 import pandas as pd
 from collections import Counter
 from ISCObject import *
@@ -23,9 +25,29 @@ def getManufOrderingISC():
             counter += 1
             list_of_ISC.update({i: counter})
     return list_of_ISC
-
+def getGeneralOrderingISC():
+    with open('json/algo_3.json') as f:
+        data = json.load(f)
+        list_of_ISC = {}
+    for i in data:
+        counter = 0
+        for event in data[i]:
+            counter += 1
+            list_of_ISC.update({i: counter})
+    return list_of_ISC
 def getOrderedActivityOccurrences():
     with open('printer_algo_3.json') as f:
+        data = json.load(f)
+        list_of_ISC = []
+        final_list = []
+        for i in data:
+          list_of_ISC.append(i.split("/"))
+        for sublist in list_of_ISC:
+            for item in sublist:
+                final_list.append(item)
+        return Counter(final_list)
+def getGeneralOrderedActivityOccurrences():
+    with open('json/algo_3.json') as f:
         data = json.load(f)
         list_of_ISC = []
         final_list = []
@@ -48,6 +70,13 @@ def getManufOrderSummary():
         return Counter(final_list)
 def gettotalalgo3constraintsKPI():
     with open('printer_algo_3.json') as f:
+        data = json.load(f)
+        counter = 0
+        for i in data:
+            counter += 1
+    return counter
+def getgeneraltotalalgo3constraintsKPI():
+    with open('json/algo_3.json') as f:
         data = json.load(f)
         counter = 0
         for i in data:
@@ -119,6 +148,10 @@ def getNonConISCs(total):
     return total
 
 if __name__ == '__main__':
+    with open('json/algo_3.json') as f:
+        data = json.load(f)
+        for i in data:
+            print(i)
     # pat = os.getcwd()
     # path = os.path.join(pat, "data", "manufacturing")
     # args = {}
@@ -150,5 +183,39 @@ if __name__ == '__main__':
     # f.closed
     #print(getNonConISCs(getNonConTotal()))
     #print(getNonConISCs(getNonConTotal()))
-    print(getManufOrderingISC())
+    #print(getOrderingISC())
+    # pather = os.path.join(os.getcwd(), 'data', 'printer')
+    # with open('upload.config', 'a') as file:
+    #     for path in os.listdir(pather):
+    #         l = "\n" + "- data/upload/" + path
+    #         file.write(l)
+    # myvars = {}
+    # with open("upload.config") as myfile:
+    #     for line in myfile:
+    #         name, var = line.partition(":")[::2]
+    #         myvars[name.strip()] = var
+    # names = type("Names", (), myvars)
+    # args = type("Names", (), {})
+    # args.g3 = float(names.g3)
+    # args.eps3 = float(names.eps3)
+    # args.eps4 = float(names.eps4)
+    # args.a3 = bool(names.a3)
+    # args.a4 = bool(names.a4)
+    # args.minerabs = int(names.minerabs)
+    # args.minerrel = float(names.minerrel)
+    # print(type(args.minerabs))
+    # pather = os.path.join(os.getcwd(), 'data', 'upload')
+    # with open('upload.config', 'a') as file
+    #     for path in os.listdir(pather):
+    #         l = "\n" + "- data/upload/" + path
+    #         file.write(l)
+    # filename= os.path.join(os.getcwd(), "upload.config")
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--config', nargs= '?', default=filename)
+    # args = parser.parse_args()
+    # with open(args.config, 'r') as stream:
+    #     try:
+    #         conf = yaml.full_load(stream)
+    #     except yaml.YAMLError as exc:
+    #         print(exc)
 
