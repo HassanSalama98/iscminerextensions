@@ -27,10 +27,10 @@ def upload():
     target = os.path.join(UPLOAD_FOLDER, 'upload')
     if not os.path.isdir(target):
         os.mkdir(target)
-    # else:
-    #     resultFiles = glob.glob(target + "/*")
-    #     for res in resultFiles:
-    #         os.remove(res)
+    else:
+        resultFiles = glob.glob(target + "/*")
+        for res in resultFiles:
+            os.remove(res)
     files = request.files.getlist('file')
     for file in files:
         filename = secure_filename(file.filename)
@@ -38,7 +38,7 @@ def upload():
         file.save(destination)
         session['uploadFilePath'] = destination
     ISCmain.main()
-    return "Test"
+    return "Success"
 
 
 # @app.route('/indexPrint')
@@ -114,6 +114,7 @@ def generalIndex():
         dictio = ",".join(act)
         finalString += dictio + "%"
         counter += 1
+    finalString = finalString[:-1]
     return finalString
 @app.route('/generalKPI')
 def generalKPI():

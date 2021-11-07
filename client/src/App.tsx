@@ -6,10 +6,10 @@ import Tabs from '@mui/material/Tabs';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
+
 import IconButton from '@mui/material/IconButton';
 import NonConcurrentGraphDisplay from './NonConcurrentGraphDisplay';
 import OrderingGraphDisplay from './OrderingGraphDisplay';
-import DataSelector from './DataSelector';
 
 function App() {
     const [currentTabIndex, setCurrenTabIndex] = React.useState(1);
@@ -59,9 +59,9 @@ function App() {
 
             <Switch>
                 {/* TODO remove later */}
-                <Route path="/test">
+                {/* <Route path="/test">
                     <DataSelector />
-                </Route>
+                </Route> */}
                 <Route path="/nonconcurrent">
                     <NonConcurrentGraphDisplay sidebarOpen={sidebarOpen} marginLeft={marginLeft} />
                 </Route>

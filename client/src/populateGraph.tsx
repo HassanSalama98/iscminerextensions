@@ -1,50 +1,81 @@
-import { createCompoundNode, createEdge, createBasicNode, splitInput, parseProcessConnection } from './util';
+import { parseGraphData, parseInterEdges, convertToKV, convertToKVV } from './dataparser';
 
-function drawProcess(processId: string, events: string[]): [nodeType[], edgeType[]] {
-    let nodes: nodeType[] = events.map((e, i) => createBasicNode(e, processId));
-    let edges: edgeType[] = [];
-    var startNode = nodes[0].data.id;
-    for (let i = 1; i < nodes.length; i++) {
-        let endNode = nodes[i].data.id;
-        edges.push(createEdge("", startNode, endNode, ""));
-        startNode = endNode;
-    }
-    nodes.push(createCompoundNode(processId));
-    return [nodes, edges];
-}
-export const fetchData = async () => {
-    let nodes: nodeType[] = [];
-    let edges: edgeType[] = [];
-     return await fetch("/printIndex").then(res => res.text()).then(res => {
-        const m = res.split("%");
-        for (let i = 0; i < m.length; ++i) {
-            let events = splitInput(m[i]);
-            let [ns, es] = drawProcess('p' + (i + 1), events);
-            console.log(events)
-            nodes = nodes.concat(ns);
-            edges = edges.concat(es);
-        }
-        return { nodes: nodes, edges: edges };
-     })
+export const fetchData = async (url: string = "/index") => {
+    const res = "step1,step2,step3,step4,step5%step6,step7,step8,step9,step10%step11,step12,step13,step15";
 
+    // return await fetch(url).then(res => res.text()).then(res => {
+        return parseGraphData(res);
+    // });
 }
- export const fetchOrderISC = async () => {
-    let edges: edgeType[] = [];
 
-     return await fetch("/printKPI").then(res => res.json()).then(res => {
-        for (const conn in res) {
-            const kpi = res[conn];
-            const [p1, p2] = parseProcessConnection(conn);
-            const edge = createEdge("Order Obedience:" + kpi.toString() + "%", p1, p2, "inter");
-            edges.push(edge);
-        }
-        return edges
-     })
-}
-export const fetchOrderSummary = async () => {
-     return await fetch("/printOrderSummary").then(res => {return res.json()});
-}
-export const fetchOrderPie = async () => {
-    return await fetch("/printOrder").then(res => {return res.json()});
+export const fetchOrderISC = async (url: string = "/KPI") => {
+    const res: {[index: string]: number; }  = {
+        "step6/step12": 100,
+        "step1/step12": 82,
+        "step4/step15": 21.4,
+    };
 
+    // return await fetch(url).then(res => res.json()).then(res => {
+        return parseInterEdges(res);
+    // });
+}
+
+export const fetchOrderSummary = async (url: string = "/OrderSummary") => {
+    const res: { [index: string]: number } = {
+        "Total Number of ISC": 7,
+        "Deliver Bill": 3,
+        "Write Bill": 3,
+        "Design Photo Poster": 2,
+        "Deliver Flyer": 1,
+        "Deliver Poster": 1,
+        "Print Bill": 1,
+        "Print Flyer": 1,
+        "Receive Flyer Order": 1,
+        "Receive Order and Photo": 1
+    };
+
+    // return await fetch(url).then(res => res.json()).then(res => {
+        return convertToKV(res)
+    // });
+}
+
+export const fetchOrderPie = async (url: string = "/OrderPie") => {
+    const res: { [index: string]: number } = {
+        "a": 100,
+        "b": 82,
+        "c": 21.4,
+    };
+
+    // uncomment dis
+    // return await fetch("/OrderPie").then(res => res.json()).then(res => {
+        return convertToKV(res);
+    // });
+}
+
+
+
+// NON CONCURURENT
+
+export const fetchNonConData = async (url: string = "/NonConData") => {
+    const res: { [index: string]: number } = {
+        "a": 100,
+        "b": 82,
+        "c": 21.4,
+    };
+
+    // return await fetch(url).then(res => res.json()).then(res => {
+        return convertToKV(res);
+    // });
+}
+
+export const fetchNonConStackedData = async (url: string = "/NonConData") => {
+    const res = {
+        "a": [80, 20],
+        "b": [30, 70],
+        "c": [45, 55],
+    };
+
+    // return await fetch(url).then(res => res.json()).then(res => {
+        return convertToKVV(res);
+    // });
 }

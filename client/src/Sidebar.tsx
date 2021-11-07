@@ -17,7 +17,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({ children, open }) => {
             anchor="left"
             open={open}
             id='drawer'
-            style={{ position: 'relative'}} // 172
+            style={{ position: 'relative', width: "200px"}} // 172
             className='drawer'
             classes={{
                 paper: 'drawer',

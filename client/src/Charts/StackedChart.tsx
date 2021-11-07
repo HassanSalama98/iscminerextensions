@@ -1,30 +1,22 @@
 import { Chart, BarSeries, Title, ArgumentAxis, ValueAxis, Legend } from '@devexpress/dx-react-chart-material-ui';
 import { Animation, Stack } from '@devexpress/dx-react-chart';
 
-export type ChartDatapoint = {
+export type StackedChartDatapoint = {
     key: string;
     value1: number;
     value2: number;
 }
 
 type StackedChartProps = {
-    data: ChartDatapoint[];
+    data: StackedChartDatapoint[];
     title: string;
     name1: string;
     name2: string;
 };
 
 const StackedChart = ({ data, title, name1, name2 }: StackedChartProps) => {
-    const dd: ChartDatapoint[] = [
-        {key: 'a', value1: 80, value2: 20},
-        { key: 'b', value1: 30, value2: 70 },
-        { key: 'c', value1: 40, value2: 60 },
-    ];
-
     return (
-        <Chart
-            data={dd}
-        >
+        <Chart data={data} >
             <ArgumentAxis />
             <ValueAxis />
 
@@ -40,9 +32,7 @@ const StackedChart = ({ data, title, name1, name2 }: StackedChartProps) => {
             />
 
             <Stack
-                stacks={[
-                { series: [name1, name2] },
-                ]}
+                stacks={[{ series: [name1, name2] }]}
             />
 
             <Title text={title} />

@@ -1,12 +1,3 @@
-export function splitInput(text: string) {
-    return text.split(',');
-}
-
-export function parseProcessConnection(connection: string) {
-    var [p1, p2] = connection.split('/');
-    return [p1, p2];
-}
-
 function createNode(name: string, index: string, process: string, type: string) {
     return { data: { id: index, parent: process, label: name, type: type } };
 }

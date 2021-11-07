@@ -61,10 +61,10 @@ def main():
   paths = args.xesfiles
   if not os.path.exists(os.path.join(fn,'json')):
     os.makedirs(os.path.join(fn,'json'))
-  # else:
-  #   resultFiles = glob.glob(os.path.join(fn, 'json') + "/*")
-  #   for res in resultFiles:
-  #         os.remove(res)
+  else:
+    resultFiles = glob.glob(os.path.join(fn, 'json') + "/*")
+    for res in resultFiles:
+          os.remove(res)
 
   try:
     iscobj = ISCObject(fn,paths,args)
@@ -79,6 +79,19 @@ def main():
       json.dump(x,f)
     with open(os.path.join(fn,'json','algo_4.json'),'w') as f:
       json.dump(x,f)
+
+    file = open('upload.config', 'rb')
+    pos = next = 0
+    for line in file:
+      pos = next
+      next += len(line)
+    file = open('upload.config', 'ab')
+    file.truncate(pos)
+
+    with open('upload.config', 'a') as final:
+      m = "xesfiles:"
+      final.write(m)
+
     #with open(os.path.join(fn,'json','algo_2_data_constraint_start_complete.json'),'w') as f:
      # json.dump(x,f)
     #with open(os.path.join(fn,'json','algo_2_data_constraint_start_start.json'),'w') as f:

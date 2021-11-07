@@ -164,6 +164,22 @@ if __name__ == '__main__':
     #     for i in data:
     #         print(i)
     print(getNonConISCs(getNonConTotal()))
+    # pather = os.path.join(os.getcwd(), 'data', 'upload')
+    # with open('upload.config', 'a') as file:
+    #     for path in os.listdir(pather):
+    #         l = " " + "data/upload/" + path
+    #         file.write(l)
+    # file = open('upload.config', 'rb')
+    # pos = next = 0
+    # for line in file:
+    #     pos = next
+    #     next += len(line)
+    # file = open('upload.config', 'ab')
+    # file.truncate(pos)
+    # with open('upload.config', 'a') as final:
+    #     m = "xesfiles:"
+    #     final.write(m)
+
     # pat = os.getcwd()
     # path = os.path.join(pat, "data", "manufacturing")
     # args = {}
