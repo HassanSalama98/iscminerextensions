@@ -1,3 +1,1 @@
-# FactorySimulation
-
-Simulating factory processes.
+Client Side of Application

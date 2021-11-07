@@ -20,7 +20,8 @@ path_bill = os.path.join(pat, "data", "printer", "billinstances.xes")
 path_flyer = os.path.join(pat, "data", "printer", "flyerinstances.xes")
 path_poster = os.path.join(pat, "data", "printer", "posterinstances.xes")
 paths = os.path.join(pat, "data", "manufacturing")
-pathg = os.path.join(pat, "data", "upload")
+#pathg = os.path.join(pat, "data", "upload")
+pathp = os.path.join(pat, "data", "printer")
 os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz/bin/'
 log_bill = pm4py.read_xes(path_bill)
 log_flyer = pm4py.read_xes(path_flyer)
@@ -74,22 +75,22 @@ def getOrderAccuaracy(log1,log2,log3):
            for key, value in list1.items():
                if(key in i):
                    if i in list_of_results.keys():
-                     if (counter/(value/2)) > list_of_results[i]:
-                         list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+                     if (counter/(value/2)) * 100 > list_of_results.get(i):
+                      list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
                      else: counter = counter
                    else: list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
            for key, value in list2.items():
               if(key in i):
                 if i in list_of_results.keys():
-                  if (counter / (value / 2)) > list_of_results[i]:
+                  if (counter / (value / 2)) * 100> list_of_results.get(i):
                     list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
                   else: counter = counter
                 else: list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
            for key, value in list3.items():
                 if(key in i):
                  if i in list_of_results.keys():
-                  if (counter / (value / 2)) > list_of_results[i]:
-                      list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+                  if (counter / (value / 2)) * 100 > list_of_results.get(i):
+                    list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
                   else: counter = counter
                  else:
                        list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
@@ -106,16 +107,16 @@ def getOrderObedience(listOfLogs):
             for events in data[i]:
                 counter += 1
             for list in listOfLists:
-             for key, value in list.items():
-                if (key in i):
-                    if i in list_of_results.keys():
-                        if (counter / (value / 2)) > list_of_results[i]:
-                            list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+                for key, value in list.items():
+                    if (key in i):
+                        if i in list_of_results.keys():
+                            if ((counter / (value / 2) * 100) > list_of_results.get(i)):
+                                list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+                            else:
+                                counter = counter
                         else:
-                            counter = counter
-                    else:
-                        list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
-        return list_of_results
+                            list_of_results.update({i: round((counter / (value / 2)) * 100, 2)})
+    return list_of_results
 def get_activities(log):
     heuristicsnet = heuristics_miner.apply_heu(log)
     graph = hn_visualizer.apply(heuristicsnet)
@@ -152,12 +153,12 @@ def readlog(log):
     return new
 if __name__ == '__main__':
     listOfLogs = []
-    for file in os.listdir(pathg):
-        log = xes_importer.apply(os.path.join(pathg, file))
+    for file in os.listdir(paths):
+        log = xes_importer.apply(os.path.join(paths, file))
         listOfLogs.append(log)
-        print(getTotalActivityOccurrence(log))
+       # print(getTotalActivityOccurrence(log))
     print(getOrderObedience(listOfLogs))
-    print(getOrderAccuaracy(log_flyer, log_bill, log_poster))
+   # print(getOrderAccuaracy(log_flyer, log_poster, log_bill))
    #  print(getTotalActivityOccurrence(log_poster))
    #  print(getTotalActivityOccurrence(log_flyer))
    #  print(getTotalActivityOccurrence(log_bill))

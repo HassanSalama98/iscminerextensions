@@ -5,11 +5,12 @@ from werkzeug.utils import secure_filename
 from Meta import get_activities
 from Meta import readlog, getAllActivities
 from Meta import getOrderAccuaracy, getOrderSummary, getOrderObedience, getGeneralOrderSummary
-from main import getManufNonConTotal, getGeneralOrderingISC
-from main import getOrderingISC, getPairAllocation, getNonConTotal, getNonConISCs,getManufOrderingISC
+from main import getManufNonConTotal, getGeneralOrderingISC, getGeneralNonConTotal
+from main import getOrderingISC, getPairAllocation, getNonConTotal, getNonConISCs, getManufOrderingISC
 import os
 import logging
 import ISCmain
+import glob
 
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'data')
@@ -26,6 +27,10 @@ def upload():
     target = os.path.join(UPLOAD_FOLDER, 'upload')
     if not os.path.isdir(target):
         os.mkdir(target)
+    # else:
+    #     resultFiles = glob.glob(target + "/*")
+    #     for res in resultFiles:
+    #         os.remove(res)
     files = request.files.getlist('file')
     for file in files:
         filename = secure_filename(file.filename)
@@ -124,15 +129,15 @@ def generalOrderSummary():
 @app.route('/generalOrderPie')
 def generalOrderPie():
     return getGeneralOrderingISC()
-# @app.route('/generalNonConKPI')
-# def generalNonConKPI():
-#     return
-# @app.route('/generalNonConPie')
-# def generalNonConPie():
-#     return
-# @app.route('/generalPairAllocation')
-# def generalPairAllocation():
-#     return
+@app.route('/generalNonConKPI')
+def generalNonConKPI():
+    return getNonConISCs(getGeneralNonConTotal())
+@app.route('/generalNonConPie')
+def generalNonConPie():
+     return getNonConISCs(getGeneralNonConTotal())
+@app.route('/generalPairAllocation')
+def generalPairAllocation():
+     return getPairAllocation(getGeneralNonConTotal())
 if __name__ == '__main__':
     app.secret_key = os.urandom(24)
     app.run(debug=True)

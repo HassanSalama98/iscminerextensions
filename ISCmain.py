@@ -9,6 +9,7 @@ import json
 import datetime
 from ISCObject import *
 from Heuristics import *
+import glob
 
 
 def main():
@@ -17,8 +18,8 @@ def main():
     for path in os.listdir(pather):
       l = " " + "data/upload/" + path
       file.write(l)
-  myvars = {}
 
+  myvars = {}
   with open("upload.config") as myfile:
     for line in myfile:
       name, var = line.partition(":")[::2]
@@ -56,13 +57,14 @@ def main():
   #   args.a2 = False
   #   args.a3 = True
   #   args.a4 = True
-
   fn = os.getcwd()
-
   paths = args.xesfiles
-
   if not os.path.exists(os.path.join(fn,'json')):
     os.makedirs(os.path.join(fn,'json'))
+  # else:
+  #   resultFiles = glob.glob(os.path.join(fn, 'json') + "/*")
+  #   for res in resultFiles:
+  #         os.remove(res)
 
   try:
     iscobj = ISCObject(fn,paths,args)

@@ -109,6 +109,17 @@ def getNonConTotal():
                     counter += 1
             result.update({i : counter})
     return result
+def getGeneralNonConTotal():
+    with open('json/algo_4.json') as f:
+        data = json.load(f)
+        result ={}
+        for i in data:
+            counter = 0
+            for events in data[i]:
+                for j in events:
+                    counter += 1
+            result.update({i : counter})
+    return result
 def getManufNonConTotal():
     with open('manuf_algo_4.json') as f:
         data = json.load(f)
@@ -148,10 +159,11 @@ def getNonConISCs(total):
     return total
 
 if __name__ == '__main__':
-    with open('json/algo_3.json') as f:
-        data = json.load(f)
-        for i in data:
-            print(i)
+    # with open('json/algo_3.json') as f:
+    #     data = json.load(f)
+    #     for i in data:
+    #         print(i)
+    print(getNonConISCs(getNonConTotal()))
     # pat = os.getcwd()
     # path = os.path.join(pat, "data", "manufacturing")
     # args = {}
