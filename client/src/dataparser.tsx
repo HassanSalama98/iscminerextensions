@@ -48,6 +48,17 @@ export const parseInterEdges = (res: { [index: string]: number; }) => {
     return edges;
 }
 
+export const parseNonConInterEdges = (res: { [index: string]: string[]; }) => {
+    let edges: edgeType[] = [];
+    for (const conn in res) {
+        const kpi = res[conn];
+        const [p1, p2] = parseProcessConnection(conn);
+        const edge = createEdge("Execution Delay:" + kpi.toString(), p1, p2, "inter");
+        edges.push(edge);
+    }
+    return edges;
+}
+
 export const convertToKV = (data: { [index: string]: number }) => {
     return Object.entries(data).map(([k, v]) => {
         return { 'key': k, 'value': v }

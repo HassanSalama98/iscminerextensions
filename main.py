@@ -5,6 +5,7 @@ import argparse
 import pandas as pd
 from collections import Counter
 from ISCObject import *
+from datetime import datetime, timedelta
 def getOrderingISC():
     with open('printer_algo_3.json') as f:
         data = json.load(f)
@@ -90,7 +91,89 @@ def getManufAlgo3Constraints():
             counter += 1
     return counter
 def getTimeDifference():
-    print()
+    with open('json/algo_4.json') as f:
+        data = json.load(f)
+        listOfResults = []
+        for i in data:
+            datetimelist = []
+            for events in data[i]:
+                for j in events:
+                    m = j["ev1"]["ev1end"]["attrib"]["time:timestamp"]
+                    m = m[:19]
+                    m = m.replace("T", " ")
+                    l = datetime.strptime(m, "%Y-%m-%d %H:%M:%S")
+                    p = j["ev2"]["ev2start"]["attrib"]["time:timestamp"]
+                    p = p[:19]
+                    p = p.replace("T", " ")
+                    k = datetime.strptime(p, "%Y-%m-%d %H:%M:%S")
+                    res = k - l
+                    datetimelist.append(res)
+            avgTime = sum([date for date in datetimelist],timedelta()) / len(datetimelist)
+            listOfResults.append(i)
+            listOfResults.append(str(avgTime))
+            results = dict(zip(listOfResults[::2], listOfResults[1::2]))
+            for key, value in results.copy().items():
+                for keys, values in results.copy().items():
+                    i, j = key.split("/")
+                    if (i in keys and j in keys and keys != key):
+                        results.update({keys: [values, value]})
+            for o, valuer in results.copy().items():
+                for l in results.copy().keys():
+                    m, n = o.split("/")
+                    if m in l and n in l and o != l:
+                        del results[l]
+                        results.setdefault(o, valuer)
+        return results
+def getPrinterTimeDifference():
+    with open('printer_algo_4.json') as f:
+        data = json.load(f)
+        counter = 0
+        listOfResults = []
+        for i in data:
+            counter += 1
+            datetimelist = []
+            results = dict()
+            for events in data[i]:
+                for j in events:
+                    m = j["ev1"]["ev1end"]["attrib"]["time:timestamp"]
+                    m = m[:19]
+                    m = m.replace("T", " ")
+                    l = datetime.strptime(m, "%Y-%m-%d %H:%M:%S")
+                    p = j["ev2"]["ev2start"]["attrib"]["time:timestamp"]
+                    p = p[:19]
+                    p = p.replace("T", " ")
+                    k = datetime.strptime(p, "%Y-%m-%d %H:%M:%S")
+                    res = k - l
+                    datetimelist.append(res)
+            avgTime = sum([date for date in datetimelist],timedelta()) / len(datetimelist)
+            listOfResults.append(i)
+            listOfResults.append(str(avgTime))
+            results = dict(zip(listOfResults[::2], listOfResults[1::2]))
+            for key, value in results.copy().items():
+                for keys, values in results.copy().items():
+                    i, j = key.split("/")
+                    if (i in keys and j in keys and keys != key):
+                        results.update({keys: [values, value]})
+            for o, valuer in results.copy().items():
+                for l in results.copy().keys():
+                    m, n = o.split("/")
+                    if m in l and n in l and o != l:
+                        del results[l]
+                        results.setdefault(o, valuer)
+        return results
+
+def getNonConKPI(time):
+    for key,value in time.copy().items():
+        listOfDates = []
+        for keys, values in time.copy().items():
+            i, j = key.split("/")
+            if (i in keys and j in keys and keys != key):
+                listOfDates.append(datetime.strptime(value[:8], "%H:%M:%S"))
+                listOfDates.append(datetime.strptime(values[:8], "%H:%M:%S"))
+                avg = sum([date for date in listOfDates], timedelta()) / len(listOfDates)
+                del time[keys]
+                time.update({key: avg})
+    return time
 def getNonConISC():
     with open('printer_algo_4.json') as f:
         data = json.load(f)
@@ -163,7 +246,7 @@ if __name__ == '__main__':
     #     data = json.load(f)
     #     for i in data:
     #         print(i)
-    print(getNonConISCs(getNonConTotal()))
+    print(getPrinterTimeDifference())
     # pather = os.path.join(os.getcwd(), 'data', 'upload')
     # with open('upload.config', 'a') as file:
     #     for path in os.listdir(pather):

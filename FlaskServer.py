@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from Meta import get_activities
 from Meta import readlog, getAllActivities
 from Meta import getOrderAccuaracy, getOrderSummary, getOrderObedience, getGeneralOrderSummary
-from main import getManufNonConTotal, getGeneralOrderingISC, getGeneralNonConTotal
+from main import getManufNonConTotal, getGeneralOrderingISC, getGeneralNonConTotal, getTimeDifference
 from main import getOrderingISC, getPairAllocation, getNonConTotal, getNonConISCs, getManufOrderingISC
 import os
 import logging
@@ -132,7 +132,7 @@ def generalOrderPie():
     return getGeneralOrderingISC()
 @app.route('/generalNonConKPI')
 def generalNonConKPI():
-    return getNonConISCs(getGeneralNonConTotal())
+    return getTimeDifference()
 @app.route('/generalNonConPie')
 def generalNonConPie():
      return getNonConISCs(getGeneralNonConTotal())

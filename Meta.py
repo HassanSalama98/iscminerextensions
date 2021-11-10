@@ -152,13 +152,13 @@ def readlog(log):
     new = pm4py.read_xes(log)
     return new
 if __name__ == '__main__':
-    listOfLogs = []
-    for file in os.listdir(paths):
-        log = xes_importer.apply(os.path.join(paths, file))
-        listOfLogs.append(log)
+    # listOfLogs = []
+    # for file in os.listdir(paths):
+    #     log = xes_importer.apply(os.path.join(paths, file))
+    #     listOfLogs.append(log)
        # print(getTotalActivityOccurrence(log))
-    print(getOrderObedience(listOfLogs))
-   # print(getOrderAccuaracy(log_flyer, log_poster, log_bill))
+    #print(getOrderObedience(listOfLogs))
+    print(getOrderAccuaracy(log_flyer, log_poster, log_bill))
    #  print(getTotalActivityOccurrence(log_poster))
    #  print(getTotalActivityOccurrence(log_flyer))
    #  print(getTotalActivityOccurrence(log_bill))

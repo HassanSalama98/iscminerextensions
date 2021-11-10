@@ -13,6 +13,19 @@ import glob
 
 
 def main():
+
+  file = open('upload.config', 'rb')
+  pos = next = 0
+  for line in file:
+    pos = next
+    next += len(line)
+  file = open('upload.config', 'ab')
+  file.truncate(pos)
+
+  with open('upload.config', 'a') as final:
+    m = "xesfiles:"
+    final.write(m)
+
   pather = os.path.join(os.getcwd(), 'data', 'upload')
   with open('upload.config', 'a') as file:
     for path in os.listdir(pather):
@@ -80,17 +93,17 @@ def main():
     with open(os.path.join(fn,'json','algo_4.json'),'w') as f:
       json.dump(x,f)
 
-    file = open('upload.config', 'rb')
-    pos = next = 0
-    for line in file:
-      pos = next
-      next += len(line)
-    file = open('upload.config', 'ab')
-    file.truncate(pos)
-
-    with open('upload.config', 'a') as final:
-      m = "xesfiles:"
-      final.write(m)
+    # file = open('upload.config', 'rb')
+    # pos = next = 0
+    # for line in file:
+    #   pos = next
+    #   next += len(line)
+    # file = open('upload.config', 'ab')
+    # file.truncate(pos)
+    #
+    # with open('upload.config', 'a') as final:
+    #   m = "xesfiles:"
+    #   final.write(m)
 
     #with open(os.path.join(fn,'json','algo_2_data_constraint_start_complete.json'),'w') as f:
      # json.dump(x,f)
@@ -105,3 +118,4 @@ def main():
     #with open(os.path.join(fn,'json','algo_2_regularities_instance_level.json'),'w') as f:
      # json.dump(x,f)
     f.closed
+    return "Done"
