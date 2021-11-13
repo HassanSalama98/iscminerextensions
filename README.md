@@ -22,7 +22,16 @@ Activate Virtual Environment
 ###### Running the Application
 `$ python FlaskServer.py`
 
+###### **Important Notes**
+*In case there are issues with the installment of GraphViz:*
 
+**MacOs**
+
+`brew install graphviz`
+
+**Linux**
+
+`sudo apt-get install graphviz`
 ## Client Side
 In the new command terminal navigate into the client application folder using the command `cd client`
 ###### Optional: 
@@ -37,5 +46,12 @@ In the new command terminal navigate into the client application folder using th
 `npm install`
 ###### Running the Application
 `npm start`
+
+###### **Important Notes**
+*While using the application please note that:*
+
+- When files are uploaded, no loading indicators are present. Leave the browser open until the results appear on the screen. Response time is between: 60s-120s
+- The above also applies to navigating between the ordering and non-concurrenct tabs for an upload. Response Time: 10s-30s
+
 ## Licenses
 The PM4Py framework was utilized in this project. [PM4Py License](https://github.com/pm4py/pm4py-core/blob/release/LICENSE)
