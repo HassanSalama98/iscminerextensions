@@ -1,5 +1,13 @@
-import { Chart, BarSeries, Title, ArgumentAxis, ValueAxis, Legend } from '@devexpress/dx-react-chart-material-ui';
-import { Animation, Stack } from '@devexpress/dx-react-chart';
+import {
+    Chart,
+    BarSeries,
+    Title,
+    ArgumentAxis,
+    ValueAxis,
+    Legend,
+    Tooltip
+} from '@devexpress/dx-react-chart-material-ui';
+import {Animation, EventTracker, Stack} from '@devexpress/dx-react-chart';
 
 export type StackedChartDatapoint = {
     key: string;
@@ -38,6 +46,8 @@ const StackedChart = ({ data, title, name1, name2 }: StackedChartProps) => {
             <Title text={title} />
             <Animation />
             <Legend />
+            <EventTracker />
+            <Tooltip />
         </Chart>
     );
 }

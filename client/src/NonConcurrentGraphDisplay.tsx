@@ -92,3 +92,4 @@ const NonConcurrentGraphDisplay = ({ sidebarOpen, marginLeft }: NonConcurrentGra
 
 export default NonConcurrentGraphDisplay;
 
+

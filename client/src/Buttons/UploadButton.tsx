@@ -24,7 +24,7 @@ const UploadButton = ({ displayResult }: UploadButtonProps) => {
         <label htmlFor="contained-button-file">
             <Input inputProps={{ accept: ".xes", multiple: true }} onChange={handleUpload} id="contained-button-file" type="file" hidden style={{ display: "none" }} />
             <Button component="span">
-                Upload File <FileUploadIcon />
+                Upload Files <FileUploadIcon />
             </Button>
         </label>
     );

@@ -14,6 +14,7 @@ const NonConcurrentGraph = ({ data, executionDelayShown }: NonConcurrentGraphPro
             label: executionDelayShown ? "data(label)" : "",
             'text-margin-y': -15,
             "text-rotation": "autorotate",
+            'target-arrow-shape': 'none'
            // "arrow-": none
         }
     }
