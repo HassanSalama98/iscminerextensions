@@ -37,7 +37,7 @@ Activate Virtual Environment
 
 `sudo apt-get install graphviz`
 
-[This](https://stackoverflow.com/questions/28312534/graphvizs-executables-are-not-found-python-3-4?page=1&tab=votes#tab-top) may also be helpful.
+[This](https://stackoverflow.com/questions/28312534/graphvizs-executables-are-not-found-python-3-4) may also be helpful.
 ## Client Side
 In the new command terminal navigate into the client application folder using the command `cd client`
 ###### Optional: 
@@ -57,7 +57,7 @@ In the new command terminal navigate into the client application folder using th
 *While using the application please note that:*
 
 - When files are uploaded, it takes around 60s-120s until the results appear on the screen. Please leave the browser session open.
-- The above also applies to navigating between the ordering and non-concurrenct tabs for an upload. Response Time: 10s-30s
+- The above also applies to navigating between the ordering and non-concurrent tabs for an upload. Response Time: 10s-30s
 
 ## Licenses
 The PM4Py framework was utilized in this project. [PM4Py License](https://github.com/pm4py/pm4py-core/blob/release/LICENSE)
