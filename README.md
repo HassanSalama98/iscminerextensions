@@ -58,6 +58,8 @@ In the new command terminal navigate into the client application folder using th
 
 - When files are uploaded, it takes around 60s-120s until the results appear on the screen. Please leave the browser session open.
 - The above also applies to navigating between the ordering and non-concurrent tabs for an upload. Response Time: 10s-30s
+- Only files with the extension'.xes' are accepted. Please upload **at least 2 files**.
+- The parameters for the ordering execution algorithm, non-concurrency execution algorithm and the heuristics miner are set to default values. If different parameter values are desired for the uploaded XES files, please open the **_'upload.config'_** file found in the repository and update the values of the desired parameters. Afterwards, save the config file and re-upload the XES files.
 
 ## Licenses
 The PM4Py framework was utilized in this project. [PM4Py License](https://github.com/pm4py/pm4py-core/blob/release/LICENSE)
