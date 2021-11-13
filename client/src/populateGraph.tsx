@@ -1,81 +1,156 @@
-import { parseGraphData, parseInterEdges, convertToKV, convertToKVV } from './dataparser';
+import { convertToKV, convertToKVV, parseGraphData, parseInterEdges, parseNonConInterEdges } from "./dataparser";
+import * as printer from "./resources/samples/printer";
+import * as manufacturing from "./resources/samples/manufacturing";
 
-export const fetchData = async (url: string = "/index") => {
-    const res = "step1,step2,step3,step4,step5%step6,step7,step8,step9,step10%step11,step12,step13,step15";
 
-    // return await fetch(url).then(res => res.text()).then(res => {
-        return parseGraphData(res);
-    // });
+const getSampleDataName = (sampleNr: number) => {
+    return sampleNr === 1 ? manufacturing : printer;
 }
 
-export const fetchOrderISC = async (url: string = "/KPI") => {
-    const res: {[index: string]: number; }  = {
-        "step6/step12": 100,
-        "step1/step12": 82,
-        "step4/step15": 21.4,
-    };
+export const getGraphData = async (sampleNr: number) => {
+    var data;
+    switch (sampleNr) {
+        case -1:
+            throw Error("datasource not selected");
+        case 0: {
+            data = await fetch("/generalIndex").then(res => res.text());
+            break;
+        }
+        case 1:
+        case 2: {
+            data = getSampleDataName(sampleNr).index;
+            break;
+        }
+        default:
+            throw Error("invalid datasource");
+    }
 
-    // return await fetch(url).then(res => res.json()).then(res => {
-        return parseInterEdges(res);
-    // });
+    return parseGraphData(data);
 }
 
-export const fetchOrderSummary = async (url: string = "/OrderSummary") => {
-    const res: { [index: string]: number } = {
-        "Total Number of ISC": 7,
-        "Deliver Bill": 3,
-        "Write Bill": 3,
-        "Design Photo Poster": 2,
-        "Deliver Flyer": 1,
-        "Deliver Poster": 1,
-        "Print Bill": 1,
-        "Print Flyer": 1,
-        "Receive Flyer Order": 1,
-        "Receive Order and Photo": 1
-    };
+export const getOrderISC = async (sampleNr: number) => {
+    var data: { [index: string]: number; };
+    switch (sampleNr) {
+        case -1:
+            throw Error("datasource not selected");
+        case 0: {
+            data = await fetch("/generalKPI").then(res => res.json());
+            break;
+        }
+        case 1:
+        case 2: {
+            data = getSampleDataName(sampleNr).kpi;
+            break;
+        }
+        default:
+            throw Error("invalid datasource");
+    }
 
-    // return await fetch(url).then(res => res.json()).then(res => {
-        return convertToKV(res)
-    // });
+    return parseInterEdges(data);
 }
 
-export const fetchOrderPie = async (url: string = "/OrderPie") => {
-    const res: { [index: string]: number } = {
-        "a": 100,
-        "b": 82,
-        "c": 21.4,
-    };
+export const getOrderBar = async (sampleNr: number) => {
+    var data: { [index: string]: number; };
+    switch (sampleNr) {
+        case -1:
+            throw Error("datasource not selected");
+        case 0: {
+            data = await fetch("/generalOrderSummary").then(res => res.json());
+            break;
+        }
+        case 1:
+        case 2: {
+            data = getSampleDataName(sampleNr).orderSummary;
+            break;
+        }
+        default:
+            throw Error("invalid datasource");
+    }
 
-    // uncomment dis
-    // return await fetch("/OrderPie").then(res => res.json()).then(res => {
-        return convertToKV(res);
-    // });
+    return convertToKV(data);
+}
+
+export const getOrderPie = async (sampleNr: number) => {
+    var data: { [index: string]: number; };
+    switch (sampleNr) {
+        case -1:
+            throw Error("datasource not selected");
+        case 0: {
+            data = await fetch("/generalOrderPie").then(res => res.json());
+            break;
+        }
+        case 1:
+        case 2: {
+            data = getSampleDataName(sampleNr).orderPie;
+            break;
+        }
+        default:
+            throw Error("invalid datasource");
+    }
+
+    return convertToKV(data);
 }
 
 
 
 // NON CONCURURENT
+export const getNonConPie = async (sampleNr: number) => {
+    var data: { [index: string]: number; };
+    switch (sampleNr) {
+        case -1:
+            throw Error("datasource not selected");
+        case 0: {
+            data = await fetch("/generalNonConPie").then(res => res.json());
+            break;
+        }
+        case 1:
+        case 2: {
+            data = getSampleDataName(sampleNr).nonConPie;
+            break;
+        }
+        default:
+            throw Error("invalid datasource");
+    }
 
-export const fetchNonConData = async (url: string = "/NonConData") => {
-    const res: { [index: string]: number } = {
-        "a": 100,
-        "b": 82,
-        "c": 21.4,
-    };
-
-    // return await fetch(url).then(res => res.json()).then(res => {
-        return convertToKV(res);
-    // });
+    return convertToKV(data);
 }
+export const getNonConISC = async (sampleNr: number) => {
+    var data: { [index: string]: string[]; };
+    switch (sampleNr) {
+        case -1:
+            throw Error("datasource not selected");
+        case 0: {
+            data = await fetch("/generalNonConKPI").then(res => res.json());
+            break;
+        }
+        case 1:
+        case 2: {
+            data = getSampleDataName(sampleNr).nonConKPI;
+            break;
+        }
+        default:
+            throw Error("invalid datasource");
+    }
 
-export const fetchNonConStackedData = async (url: string = "/NonConData") => {
-    const res = {
-        "a": [80, 20],
-        "b": [30, 70],
-        "c": [45, 55],
-    };
+    return parseNonConInterEdges(data);
+}
+export const getNonConStackedData = async (sampleNr: number) => {
+    var data: { [index: string]: number[]; };
+    switch (sampleNr) {
+        case -1:
+            throw Error("datasource not selected");
+        case 0: {
+            data = await fetch("/generalPairAllocation").then(res => res.json());
+            break;
+        }
+        case 1:
+        case 2: {
+            data = getSampleDataName(sampleNr).pairAllocation;
+            break;
+        }
+        default:
+            throw Error("invalid datasource");
+    }
 
-    // return await fetch(url).then(res => res.json()).then(res => {
-        return convertToKVV(res);
-    // });
+    return convertToKVV(data);
 }

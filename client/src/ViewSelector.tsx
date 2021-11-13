@@ -24,7 +24,7 @@ const ViewSelector = ({ currentView, setCurrentView }: ViewSelectorProps) => {
             onChange={handleViewChange}
             orientation="vertical"
         >
-            <ToggleButton value={View.Graph} style={{width: "172px"}}>Graph</ToggleButton>
+            <ToggleButton value={View.Graph} style={{width: "211px"}}>Graph</ToggleButton>
             <ToggleButton value={View.Bar}>Bar&nbsp;<BarChartIcon /></ToggleButton>
             <ToggleButton value={View.Pie}>Pie&nbsp;<PieChartIcon/></ToggleButton>
         </ToggleButtonGroup>

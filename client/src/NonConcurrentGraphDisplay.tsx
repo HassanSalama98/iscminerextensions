@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import React from "react";
 
-import { fetchData, fetchNonConData, fetchNonConStackedData, fetchOrderISC } from "./populateGraph";
 import NonConcurrentGraph from "./Graphs/NonConcurrentGraph";
 import Sidebar from "./Sidebar";
 import PieChart, { ChartDatapoint } from "./Charts/PieChart";
 import StackedChart, { StackedChartDatapoint } from "./Charts/StackedChart";
 import ViewSelector from "./ViewSelector";
-import { fetchSampleData, fetchSampleNonConISC, fetchSampleNonConPie, fetchSampleNonConStackedData } from "./populateGraphSample";
-import { Typography, FormControlLabel, Checkbox } from "@mui/material";
+import { getGraphData, getNonConISC, getNonConPie, getNonConStackedData } from "./populateGraph";
+import { Typography, FormControlLabel, Checkbox, Divider } from "@mui/material";
 
 enum View { Graph, Bar, Pie }
 
@@ -33,15 +32,15 @@ const NonConcurrentGraphDisplay = ({ sidebarOpen, marginLeft }: NonConcurrentGra
 
     useEffect(() => {
         if (uploadType !== -1) {
-            fetchSampleNonConISC(uploadType).then((dt: edgeType[]) => setInteredges(dt));
-            fetchSampleNonConPie(uploadType).then((dt: ChartDatapoint[]) => setChartData(dt));
-            fetchSampleNonConStackedData(uploadType).then((dt: StackedChartDatapoint[]) => setStackedChartData(dt));
+            getNonConISC(uploadType).then((dt: edgeType[]) => setInteredges(dt));
+            getNonConPie(uploadType).then((dt: ChartDatapoint[]) => setChartData(dt));
+            getNonConStackedData(uploadType).then((dt: StackedChartDatapoint[]) => setStackedChartData(dt));
         }
     }, [uploadType]);
 
     useEffect(() => {
         if (uploadType !== -1 && interedges !== []) {
-            fetchSampleData(uploadType).then((dt: { edges: any[]; nodes: any; }) =>
+            getGraphData(uploadType).then((dt: { edges: any[]; nodes: any; }) =>
                 setGraphData({ nodes: dt.nodes, edges: dt.edges.concat(interedges) })
             );
         }
@@ -84,6 +83,7 @@ const NonConcurrentGraphDisplay = ({ sidebarOpen, marginLeft }: NonConcurrentGra
                     <Typography>Options</Typography>
                     <FormControlLabel control={<Checkbox checked={executionDelayShown} onChange={toggleExecutionDelayShown} />} label="Show Execution Delay" />
                 </div>
+                <Divider />
             </Sidebar>
             {uploadType === -1 ? <p>Press on upload in sidebar</p> : renderView()}
         </div>
@@ -91,5 +91,7 @@ const NonConcurrentGraphDisplay = ({ sidebarOpen, marginLeft }: NonConcurrentGra
 }
 
 export default NonConcurrentGraphDisplay;
+
+
 
 

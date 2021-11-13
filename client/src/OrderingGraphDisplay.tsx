@@ -10,8 +10,7 @@ import PieChart from "./Charts/PieChart";
 import Button from "@mui/material/Button";
 import { Divider, Input, Typography } from "@mui/material";
 import ViewSelector from "./ViewSelector";
-import { fetchSampleData, fetchSampleOrderISC, fetchSampleOrderPie, fetchSampleOrderBar } from "./populateGraphSample";
-import { fetchOrderISC, fetchOrderSummary, fetchOrderPie, fetchData } from "./populateGraph";
+import { getGraphData, getOrderISC, getOrderPie, getOrderBar } from "./populateGraph";
 
 enum View { Graph, Bar, Pie }
 
@@ -36,15 +35,15 @@ const OrderingGraphDisplay = ({ sidebarOpen, marginLeft }: OrderingGraphDisplayP
 
     useEffect(() => {
         if (uploadType !== -1) {
-            fetchSampleOrderISC(uploadType).then((dt: edgeType[]) => setInteredges(dt));
-            fetchSampleOrderBar(uploadType).then((dt: ChartDatapoint[]) => setOrderSummaryData(dt));
-            fetchSampleOrderPie(uploadType).then((dt: ChartDatapoint[]) => setOrderSummaryPie(dt));
+            getOrderISC(uploadType).then((dt: edgeType[]) => setInteredges(dt));
+            getOrderBar(uploadType).then((dt: ChartDatapoint[]) => setOrderSummaryData(dt));
+            getOrderPie(uploadType).then((dt: ChartDatapoint[]) => setOrderSummaryPie(dt));
         }
     }, [uploadType]);
 
     useEffect(() => {
         if (uploadType !== -1 && interedges !== []) {
-            fetchSampleData(uploadType).then((dt: { edges: edgeType[]; nodes: nodeType[]; }) =>
+            getGraphData(uploadType).then((dt: { edges: edgeType[]; nodes: nodeType[]; }) =>
                 setGraphData({ nodes: dt.nodes, edges: dt.edges.concat(interedges) })
             );
         }
@@ -95,3 +94,5 @@ const OrderingGraphDisplay = ({ sidebarOpen, marginLeft }: OrderingGraphDisplayP
 }
 
 export default OrderingGraphDisplay;
+
+

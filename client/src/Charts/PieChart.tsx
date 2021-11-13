@@ -1,5 +1,7 @@
 import { Chart, BarSeries, Title, ArgumentAxis, ValueAxis, PieSeries, Legend, Tooltip } from '@devexpress/dx-react-chart-material-ui';
 import { Animation, EventTracker } from '@devexpress/dx-react-chart';
+import { Palette } from '@devexpress/dx-react-chart';
+import { schemeCategory10 } from 'd3-scale-chromatic';
 
 export type ChartDatapoint = {
     key: string;
@@ -16,6 +18,7 @@ const PieChart = ({ data, title }: PieChartProps) => {
         <Chart
             data={data}
         >
+            <Palette scheme={schemeCategory10} />
             <PieSeries
                 valueField="value"
                 argumentField="key"

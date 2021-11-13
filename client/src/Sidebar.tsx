@@ -5,6 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { FunctionComponent } from 'react';
 import UploadButton from './Buttons/UploadButton';
+import React from 'react';
 
 
 type SidebarProps = {
@@ -13,13 +14,15 @@ type SidebarProps = {
 };
 
 const Sidebar: FunctionComponent<SidebarProps> = ({ children, open, selectDatasource }) => {
+    const [uploadType, setUploadType] = React.useState(-1);
+
     return (
         <Drawer
             variant="persistent"
             anchor="left"
             open={open}
             id='drawer'
-            style={{ position: 'relative', width: "200px"}} // 172
+            style={{ position: 'relative' }} // 172, 200
             className='drawer'
             classes={{
                 paper: 'drawer',
@@ -27,19 +30,12 @@ const Sidebar: FunctionComponent<SidebarProps> = ({ children, open, selectDataso
         >
             <Toolbar />
             {children}
-            {/* <div style={{
-                    display: "flex",
-                    position: "fixed",
-                    bottom: 0,
-                    // textAlign: "center",
-                    paddingBottom: 10,
-                }}> */}
-            <Button onClick={() => selectDatasource(1)}>Manufacturing</Button>
-            <Button onClick={() => selectDatasource(2)}>Printer</Button>
+            <Button variant={uploadType === 1 ? "contained" : "text"} onClick={() => {selectDatasource(1); setUploadType(1);}}>Manufacturing</Button>
+            <Button variant={uploadType === 2 ? "contained" : "text"} onClick={() => { selectDatasource(2); setUploadType(2);}}>Printer</Button>
             <UploadButton displayResult={() => selectDatasource(0)} />
-            {/* </div> */}
         </Drawer>
     );
 }
 
 export default Sidebar;
+

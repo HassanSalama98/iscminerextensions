@@ -12,7 +12,7 @@ type GraphProps = {
 };
 
 const Graph = ({ data, stylesheet }: GraphProps) => {
-    let myCyRef;
+    let cyRef//: { current: Core | null; };
 
     const layout = {
         name: "breadthfirst",
@@ -48,17 +48,17 @@ const Graph = ({ data, stylesheet }: GraphProps) => {
             layout={layout}
             stylesheet={stylesheet}
                 cy={cy => {
-                    myCyRef = cy;
-        
+                    cyRef = cy;
+
                     console.log("EVT", cy);
-        
+
                     cy.on("tap", "node", (evt: { target: any; }) => {
                         var node = evt.target;
                         console.log("EVT", evt);
                         console.log("TARGET", node.data());
                         console.log("TARGET TYPE", typeof node[0]);
                     });
-        
+
                     // TODO remove
                     cy.on('add', 'node', _evt => {
                         cy.layout(layout).run()
