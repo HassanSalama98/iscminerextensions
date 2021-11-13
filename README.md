@@ -5,7 +5,7 @@ This repository contains the implementation of an Instance Spanning Constraint (
 
 *Two Seperate Command Terminals need to be opened to run the application: One for the server side and one for the client side*
 ## Server Side
-Depending on the python version on the operating system 'pip3' and 'python3' would need to be used.
+Depending on the python version on the operating system `pip3` and `python3` would need to be used.
 ###### Optional
 Create Python Virtual Environment
 '$ python -m venv <name_of_virtualenv>'
@@ -20,7 +20,7 @@ Activate Virtual Environment
 
 ## Client Side
 In the new command terminal navigate into the client application folder using the command 'cd client'
-######Optional: 
+###### Optional: 
 **If Nodejs is not installed on the operating system**
 '$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash'
 '$ nvm install 14.4.0'
