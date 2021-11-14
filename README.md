@@ -26,6 +26,8 @@ Activate Virtual Environment
 ###### Running the Application
 `$ python FlaskServer.py`
 
+**_The server application will be hosted on port 5000. The main page does not display any information but the different routes, for example ('/generalOrderPie'), do._**
+
 ###### **Important Notes**
 *In case there are issues with the installment of GraphViz:*
 
@@ -52,6 +54,8 @@ In the new command terminal navigate into the client application folder using th
 `npm install`
 ###### Running the Application
 `npm start`
+
+**_The client application will be hosted on port 3000._**
 
 ###### **Important Notes**
 *While using the application please note that:*
