@@ -88,7 +88,7 @@ const OrderingGraphDisplay = ({ sidebarOpen, marginLeft }: OrderingGraphDisplayP
                 </div>
                 <Divider />
             </Sidebar>
-            {uploadType === -1 ? <p>Press on upload in sidebar</p> : renderView()}
+            {uploadType === -1 ? <h4 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Select a sample or upload new files in sidebar</h4> : renderView()}
         </div>
     );
 }

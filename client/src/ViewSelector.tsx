@@ -14,9 +14,6 @@ const ViewSelector = ({ currentView, setCurrentView }: ViewSelectorProps) => {
         if (newView !== null)
             setCurrentView(newView);
     }
-
-    // (Object.keys(View).filter(key => isNaN(Number(key))) as View[]).map(view => <ToggleButton value={view}>{view}</ToggleButton>)
-
     return (
         <ToggleButtonGroup
             value={currentView}

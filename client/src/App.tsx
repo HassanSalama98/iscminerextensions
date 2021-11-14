@@ -12,7 +12,7 @@ import NonConcurrentGraphDisplay from './NonConcurrentGraphDisplay';
 import OrderingGraphDisplay from './OrderingGraphDisplay';
 
 function App() {
-    const [currentTabIndex, setCurrenTabIndex] = React.useState(1);
+    const [currentTabIndex, setCurrenTabIndex] = React.useState(window.location.pathname === "/nonconcurrent" ? 2 : 1);
 
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
@@ -58,10 +58,6 @@ function App() {
             <Toolbar />
 
             <Switch>
-                {/* TODO remove later */}
-                {/* <Route path="/test">
-                    <DataSelector />
-                </Route> */}
                 <Route path="/nonconcurrent">
                     <NonConcurrentGraphDisplay sidebarOpen={sidebarOpen} marginLeft={marginLeft} />
                 </Route>

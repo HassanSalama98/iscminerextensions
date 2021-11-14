@@ -18,24 +18,13 @@ const Graph = ({ data, stylesheet }: GraphProps) => {
         name: "breadthfirst",
         fit: true,
         directed: true,
-        padding: 80, // was 50
+        padding: 80,
         // spacingFactor: 1.5,
         animate: true,
         animationDuration: 800,
         avoidOverlap: true,
         nodeDimensionsIncludeLabels: true
     };
-
-    // const elem = {
-    //     nodes: [
-    //         { data: { id: "x", label: "X"} },
-    //         { data: { id: "y", label: "Y" } },
-    //         { data: { id: "m", label: "e" } },
-    //     ],
-    //     edges: [
-    //         { data: { target: 'x', source: "y" } },
-    //     ]
-    // };
 
     return (
         <CytoscapeComponent
@@ -49,17 +38,6 @@ const Graph = ({ data, stylesheet }: GraphProps) => {
             stylesheet={stylesheet}
                 cy={cy => {
                     cyRef = cy;
-
-                    console.log("EVT", cy);
-
-                    cy.on("tap", "node", (evt: { target: any; }) => {
-                        var node = evt.target;
-                        console.log("EVT", evt);
-                        console.log("TARGET", node.data());
-                        console.log("TARGET TYPE", typeof node[0]);
-                    });
-
-                    // TODO remove
                     cy.on('add', 'node', _evt => {
                         cy.layout(layout).run()
                         cy.fit()
